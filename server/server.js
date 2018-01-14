@@ -40,8 +40,8 @@ app.get('/todos',(req,res)=>{
 	 });
 }); */
 
-app.listen(3003, ()=>{
-	console.log(`Running on port 3003`)
+app.listen(3004, ()=>{
+	console.log(`Running on port 3004`)
 });
 
 module.exports = {app};
