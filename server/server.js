@@ -111,7 +111,22 @@ app.patch('/todos/:id',(req,res)=>{
 
 })
 
+//POST/USERS
+app.post('/users',(req,res)=>{
+	var body = _.pick(req.body,['email','password']);
+	var user = new User(body);
 
+	user.save().then(()=>{
+		return user.generateAuthToken();
+	}).then((token)=>{
+		//when you prefix a header with "x-",you're creating a custom header,
+		//that means that it's a header that is not necessarly supported by
+		//http by defauly, it's a header you use for your specific purpose
+		res.header('x-auth',token).send(user);
+	}).catch((e)=>{
+		res.status(400).send(e)
+	})
+})
 app.listen(port);
 
 module.exports = {app};
