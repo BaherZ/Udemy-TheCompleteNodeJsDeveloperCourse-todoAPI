@@ -9,7 +9,7 @@ var {User} = require('./models/user');
 var {checkID} = require('../playground/mongoose-queries.js')
 
 var app = express();
-const port = process.env.PORT || 3000; 
+const port = process.env.PORT || 3004; 
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
