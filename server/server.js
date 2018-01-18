@@ -1,11 +1,14 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 const {ObjectID} = require('mongodb');
+
 var {mongoose} = require('./db/mongoose.js');
 var {Todo} = require('./models/todo');
 var {User} = require('./models/user');
 var {checkID} = require('../playground/mongoose-queries.js')
+
 var app = express();
+const port = process.env.PORT || 3003; 
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -65,7 +68,7 @@ app.get('/todos/:id',(req,res)=>{
 }); */
 
 app.listen(3003, ()=>{
-	console.log(`Running on port 3003`)
+	console.log(`Running on port ${port}`);
 });
 
 module.exports = {app};
