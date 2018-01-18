@@ -8,10 +8,11 @@ var {User} = require('./models/user');
 var {checkID} = require('../playground/mongoose-queries.js')
 
 var app = express();
-const port = process.env.PORT || 3003; 
+const port = process.env.PORT || 3001; 
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
 app.post('/todos',(req,res)=>{
 	var todo = new Todo({
 		text:req.body.text
@@ -55,6 +56,30 @@ app.get('/todos/:id',(req,res)=>{
 },(e)=>{
 	res.status(400).send(e);
 })
+
+app.delete('/todos/:id',(req,res)=>{
+	//get the id
+	var id = req.params.id;
+	//validate the id->notvalid? return 404
+	if(!ObjectID.isValid(id)){
+		return res.status(404).send();
+	}
+	//remove the todo by id
+		//success
+			//if no doc,send 404
+			//if doc, send it back with status 200
+
+		//error
+			//400 with empty body
+	Todo.findByIdAndRemove(id).then((result)=>{
+			if(!result){
+				res.status(404).send();
+			}
+			res.send(result);
+		}).catch((e)=>{
+			res.status(400).send();
+		})
+})
 /*app.post('/todos',(req,res)=>{
 	var todo = new Todo({
 		text:"Test todo text"
@@ -67,9 +92,7 @@ app.get('/todos/:id',(req,res)=>{
 	 });
 }); */
 
-app.listen(3003, ()=>{
-	console.log(`Running on port ${port}`);
-});
+app.listen(port);
 
 module.exports = {app};
 
