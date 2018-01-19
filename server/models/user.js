@@ -37,7 +37,7 @@ UserSchema.methods.toJSON = function(){
 	var userObject = user.toObject();
 
 	return _.pick(userObject,['_id','email']);
-}
+};
 
 UserSchema.methods.generateAuthToken = function(){
 	var user = this;
@@ -50,6 +50,33 @@ UserSchema.methods.generateAuthToken = function(){
 	})
 };
 
+//function added to the statics object turn into a model method not an instance method
+UserSchema.statics.findByToken = function(token){
+	//console.log(token);
+	var User = this;
+	//console.log(User);
+	console.log(`token is: ${token}`);
+	var decoded;
+	try{
+		decoded = jwt.verify(token,'abc123');
+	}catch(e){
+		return Promise.reject();
+	}
+	/*}
+	jwt.verify(token, 'abc123', function(err, decoded) {
+	 if(err){
+	     console.log(`error is ${err}`)
+	 }else{
+	     console.log(`decoded is ${decoded}`)
+	 }
+	})
+	*/
+	return User.findOne({
+		'_id':decoded._id,
+		'tokens.token':token,
+		'tokens.access':'auth'
+	});
+}
 var User = mongoose.model('User',UserSchema);
 
 module.exports = {User}
